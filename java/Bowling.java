@@ -5,12 +5,12 @@ public class Bowling{
       List<Integer> scores = getScores(args);
       printCardHead();
       int       score = 0,
-                index = 0,
-                frame_sum = 0;
+                index = 0;
 
       // frames
-      for(int i=1; i <= 10; i++){
+      for(int frame=1; frame <= 10; frame++){
 
+          // Handle a strike
           if(scores.get(index) == 10){
               score = score
                       + scores.get(index)
@@ -18,15 +18,15 @@ public class Bowling{
                       + scores.get(index + 2);
 
               // Handle wat happens when the you're on the last frame
-              if(i == 10){
-                  printRow(i,
+              if(frame == 10){
+                  printRow(frame,
                             scores.get(index),
                             scores.get(index+1),
                             scores.get(index+2),
                             score);
 
               }else{
-                  printRow(i,
+                  printRow(frame,
                             scores.get(index),
                             0,
                             0,
@@ -40,14 +40,14 @@ public class Bowling{
               score = score
                       + 10
                       + scores.get(index + 2);
-              if(i == 10){
-                  printRow(i,
+              if(frame == 10){
+                  printRow(frame,
                           scores.get(index),
                           scores.get(index+1),
                           scores.get(index+2),
                           score);
               }else{
-                  printRow(i,
+                  printRow(frame,
                           scores.get(index),
                           scores.get(index + 1),
                           0,
@@ -56,12 +56,12 @@ public class Bowling{
               index += 2;
               continue;
           }
-          //handle bad players
+          // Handle bad players
           else{
               score = score
-                      + scores.get(index )
+                      + scores.get(index)
                       + scores.get(index + 1);
-              printRow(i,
+              printRow(frame,
                         scores.get(index),
                         scores.get(index+1),
                         0,
@@ -74,28 +74,41 @@ public class Bowling{
 
 
 
-  static void printCardHead(){
+  private static void printCardHead(){
       System.out.println("FR\tR1\tR2\tR3\tScore");
   }
 
-  static void printRow(int frame, int roll1, int roll2, int roll3, int score){
-      System.out.printf("%d\t" + "%d\t" + "%d\t" + "%d\t" + "%d%n", frame,
-              roll1, roll2, roll3, score);
+  private static void printRow(int frame, int roll1, int roll2, int roll3, int
+            score){
+
+      String first_roll = (roll1 > 0) ? "" + roll1 : "";
+      String second_roll = (roll2 > 0) ? "" + roll2 : "";
+      String third_roll = (roll3 > 0) ? "" + roll3 : "";
+
+      System.out.print(   frame         + "\t"
+                        + first_roll    + "\t"
+                        + second_roll   + "\t"
+                        + third_roll    + "\t"
+                        + score         + "\n" );
   }
 
-  static List<Integer> getScores(String[] scores){
+  private static List<Integer> getScores(String[] scores){
+      int current_item;
       List<Integer> scoreList = new ArrayList<Integer>();
-      int current_item = 0;
+
       for(String item : scores){
           try {
               current_item = Integer.parseInt(item);
           } catch (Exception e){
-              System.out.println(e);
               System.out.println("Please only input numbers");
               continue;
           }
           scoreList.add(current_item);
       }
+      while(scoreList.size() < 21){
+          scoreList.add(0);
+      }
+
       return scoreList;
   }
 }
